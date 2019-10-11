@@ -47,7 +47,7 @@ io.on("connection",(socket) => {
         if(ip==IPOfSender){
             ISentTheMessage=true;
         }
-        // console.log("Hey "+ip+" "+IPOfSender+" "+socket.username+" "+startIP+" "+endIP);
+        console.log("Hey "+ip+" "+IPOfSender+" "+socket.username+" "+startIP+" "+endIP);
         //broadcast
         io.sockets.emit("newMessage",{message:data.message,username:usernameWithoutIP,sender:ISentTheMessage});
     });
