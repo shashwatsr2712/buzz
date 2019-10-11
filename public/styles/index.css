@@ -1,0 +1,96 @@
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    height:100%;
+    margin:0;
+    font-family:'Alegreya','B612',courier,arial,helvetica;
+}
+
+/* Count Alert Margin setting */
+div#countUsers{
+    margin-bottom: 0;
+}
+
+/* Navbar */
+nav a.nav-link{
+    text-align:right;
+    background-color:#90EE90;
+}
+
+/* Navbar color */
+nav.bg-custom{
+    background-color:#FFFFFF;
+}
+
+/* Background image */
+#bg{
+    background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,.4)), url("https://previews.123rf.com/images/vska/vska1512/vska151200028/49065729-abstract-background-futuristic-technology-style-elegant-background-for-business-tech-presentations-.jpg");
+    height:100%;
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* transform: scaleX(-1); */
+}
+
+/* Container for form */
+#bg div.container{
+    padding-top:25vh;
+}
+
+/* Style label for form */
+#bg label{
+    /* font-weight: bold; */
+    font-style: italic;
+    font-size:2em;
+    text-shadow: 4px 4px 4px #FFFFFF;
+    font-family: 'Sail',dancingscript-regular,cursive;
+}
+
+/* Styling Chat Space */
+section#chatSpace{
+    max-height: 80vh;
+    overflow: auto;
+}
+
+/* Styling chat boxes */
+div.message{
+    
+}
+
+/* Style all font awesome icons */
+.awesome {
+    padding: 10px;
+    font-size: 30px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+    border-radius:50%;
+}
+
+/* Hover effect */
+.fab:hover {
+    opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+.fa-twitter {
+    background: #55ACEE;
+}
+.fa-google {
+    background: #dd4b39;
+}
+.fa-linkedin {
+    background: #007bb5;
+}
+
+/* Footer styling */
+#foot {
+    text-align: center;
+    width: 100%;
+    /* margin-top: 51vh; */
+    margin-bottom: 0px;
+    padding: 5px 0px 10px 0px;
+    background-color: #D8D7CD;
+}

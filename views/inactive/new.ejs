@@ -1,0 +1,20 @@
+<% include partials/header.ejs %>
+
+<div class="alert alert-success" role="alert" id="loginAlert">
+    <p style="text-align:center;">This name is already a part of chat. Enter something unique!</p>
+</div>
+<div id="bgLogin">
+    <div class="container">
+        <form id="loginForm" method="POST" action="/">
+            <div class="form-group">
+                <label for="userName">What do you like being called??</label>
+                <input id="userName" type="text" name="name" placeholder="Enter your name..." class="form-control"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" id="setName" type="submit">Dive In</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<% include partials/footer.ejs %>

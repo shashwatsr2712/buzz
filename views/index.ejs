@@ -1,0 +1,34 @@
+<% include partials/header.ejs %>
+
+<div id="bg">
+    <div class="container">
+        <label for="userName">"What do you like being called??"</label>
+        <div class="input-group">
+            <input id="userName" type="text" name="name" placeholder="Enter your name..." class="form-control"/>
+            <div class="input-group-append">
+                <a href="#sendingMessage" class="btn btn-primary" id="setName" type="submit">Dive In</a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+
+<section id="chatSpace">
+</section>
+<br/>
+
+<section id="sendingMessage">
+    <div class="container">
+        <div class="input-group mb-3 mr-2 ml-2">
+            <textarea id="messageToSend" type="text" class="form-control" placeholder="Type a new Message..."></textarea>
+            <div class="input-group-append">
+                <a href="#sendingMessage" class="btn btn-info" id="sendMessage" type="button">SEND</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--(Hidden) Alert after username is changed-->
+<div style="display:none;" id="helloUser" class="alert alert-success"></div>
+
+<% include partials/footer.ejs %>
