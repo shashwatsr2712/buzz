@@ -10,9 +10,17 @@ $(function(){
     let chatSpace=$("#chatSpace");
     let helloAlert=$("#helloUser");
 
+    //Put cursor in setName when 'Start Chat' is clicked
+    $("#startBtn").click(function(e){
+        e.preventDefault();
+	    username.focus();
+    });
+
     //Emit an event for setting name
-    setUserName.click(function(){
+    setUserName.click(function(e){
         socket.emit("changeUserName",{username:username.val()});
+    	e.preventDefault();
+	    message.focus();
     });
 
     //Listening for change of Username
