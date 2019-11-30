@@ -29,6 +29,7 @@ let io=require("socket.io")(server);
 
 io.on("connection",(socket) => {
     Users+=1;
+    let sID=socket.id;
     console.log("New User connected!");
     socket.username='Anonymous('+ip+')';
     //Username in socket stores IP address as well
@@ -49,7 +50,7 @@ io.on("connection",(socket) => {
         }
         console.log("Hey "+ip+" "+IPOfSender+" "+socket.username+" "+startIP+" "+endIP);
         //broadcast
-        io.sockets.emit("newMessage",{message:data.message,username:usernameWithoutIP,sender:ISentTheMessage});
+        io.sockets.emit("newMessage",{message:data.message,username:usernameWithoutIP,sender:ISentTheMessage,sender1:sID});
     });
     socket.on("disconnect",function(){
         Users-=1;

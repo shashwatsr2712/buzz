@@ -9,6 +9,7 @@ $(function(){
     let message=$("#messageToSend");
     let chatSpace=$("#chatSpace");
     let helloAlert=$("#helloUser");
+    let sessionID;
 
     //Put cursor in setName when 'Start Chat' is clicked
     $("#startBtn").click(function(e){
@@ -22,6 +23,10 @@ $(function(){
     	e.preventDefault();
 	    message.focus();
     });
+
+    socket.on('connect',()=>{
+        sessionID=socket.id;
+    })
 
     //Listening for change of Username
     socket.on("changeUserName",(data) => {
@@ -41,7 +46,7 @@ $(function(){
         message.val('');
         //Check if current client is sender or receiver
         let marginSet="margin-right:auto;border-top-right-radius:10px;border-bottom-right-radius:10px;";
-        if(data.sender){
+        if(sessionID==data.sender1){
             marginSet="margin-left:auto;border-top-left-radius:10px;border-bottom-left-radius:10px;";
         }
         //Choosing a random bg color for chatbox
