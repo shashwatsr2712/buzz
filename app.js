@@ -35,7 +35,7 @@ io.on("connection",(socket) => {
     });
     socket.on("newMessage",(data) => {
         //broadcast
-        io.sockets.emit("newMessage",{message:data.message,username:data.username,sender:sID});
+        io.sockets.emit("newMessage",{message:data.message,username:socket.username,sender:sID});
     });
     socket.on("disconnect",function(){
         Users-=1;
