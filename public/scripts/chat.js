@@ -24,6 +24,7 @@ $(function(){
 	    message.focus();
     });
 
+    //SessionID of Client
     socket.on('connect',()=>{
         sessionID=socket.id;
     })
@@ -46,7 +47,7 @@ $(function(){
         message.val('');
         //Check if current client is sender or receiver
         let marginSet="margin-right:auto;border-top-right-radius:10px;border-bottom-right-radius:10px;";
-        if(sessionID==data.sender1){
+        if(sessionID==data.sender){
             marginSet="margin-left:auto;border-top-left-radius:10px;border-bottom-left-radius:10px;";
         }
         //Choosing a random bg color for chatbox
