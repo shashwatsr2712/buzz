@@ -28,17 +28,20 @@ io.on("connection",(socket) => {
     let sID=socket.id;
     console.log("New User connected!");
     socket.username='Anonymous';
+    let sName=socket.username;
     //Username in socket
     socket.on('changeUserName',(data) => {
         socket.username=data.username;
+        sName=socket.username;
         socket.emit("changeUserName",{username:data.username});
     });
     socket.on("newMessage",(data) => {
-        //broadcast
+        //broadcast to all (io.sockets <-> io)
         io.sockets.emit("newMessage",{message:data.message,username:socket.username,sender:sID});
     });
     socket.on("disconnect",function(){
         Users-=1;
-        console.log('A user disconnected!');
+        //broadcast to all but the one who has disconnected
+        socket.broadcast.emit("disconnection",{id:sID,username:sName});
     });
 });

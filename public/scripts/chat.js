@@ -9,18 +9,27 @@ $(function(){
     let message=$("#messageToSend");
     let chatSpace=$("#chatSpace");
     let helloAlert=$("#helloUser");
+    let detailAlert=$("#detailInfo");
     let sessionID;
 
     //Put cursor in setName when 'Start Chat' is clicked
     $("#startBtn").click(function(e){
         e.preventDefault();
-	    username.focus();
+        username.focus();
     });
 
-    //Emit an event for setting name
+    //Configuring 'Enter' key for button click of changing username
+    username.keyup(function(event){
+        if(event.keyCode===13){
+            setUserName.click();
+        }
+    });
+
+    //Emit an event (and scroll to bottom) for setting name
     setUserName.click(function(e){
         socket.emit("changeUserName",{username:username.val()});
-    	e.preventDefault();
+        e.preventDefault();
+        $("html,body").animate({scrollTop:$(document).height()},'slow');
 	    message.focus();
     });
 
@@ -33,8 +42,8 @@ $(function(){
     socket.on("changeUserName",(data) => {
         helloAlert.empty();
         helloAlert.append("Welcome "+data.username+"!");
-        helloAlert.fadeIn();
-        helloAlert.fadeOut(2000);
+        helloAlert.slideDown(1000);
+        helloAlert.slideUp(1000);
     });
 
     //Emit event for sending message
@@ -45,8 +54,8 @@ $(function(){
     //Listening for new messages
     socket.on("newMessage",(data) => {
         message.val('');
-        //Check if current client is sender or receiver
         let marginSet="margin-right:auto;border-top-right-radius:10px;border-bottom-right-radius:10px;";
+        //Check if current client is sender or receiver
         if(sessionID==data.sender){
             marginSet="margin-left:auto;border-top-left-radius:10px;border-bottom-left-radius:10px;";
         }
@@ -57,6 +66,14 @@ $(function(){
         chatSpace.append("<div class='message' "+styling+"><strong>"+data.username+"</strong><br/>"+data.message+"</div><br/>");
         //Scroll Chat Space to top when new message comes
         chatSpace.animate({scrollTop:$(document).height()},'slow');
+    });
+
+    //Listening for any disconnected clients
+    socket.on("disconnection",(data)=>{
+        detailAlert.empty();
+        detailAlert.append(data.username+" (ID:"+data.id+") disconnected!");
+        detailAlert.slideDown(500);
+        setTimeout(()=>{detailAlert.slideUp(500);},3000);
     });
 
 });
