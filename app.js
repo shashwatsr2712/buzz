@@ -33,11 +33,18 @@ io.on("connection",(socket) => {
     socket.on('changeUserName',(data) => {
         socket.username=data.username;
         sName=socket.username;
-        socket.emit("changeUserName",{username:data.username});
+        socket.emit("changeUserName",{username:sName});
     });
     socket.on("newMessage",(data) => {
         //broadcast to all (io.sockets <-> io)
-        io.sockets.emit("newMessage",{message:data.message,username:socket.username,sender:sID});
+        io.sockets.emit("newMessage",{message:data.message,username:sName,sender:sID});
+    });
+    socket.on("typing",(data)=>{
+        if(data){
+            socket.broadcast.emit("typing",{id:sID,username:sName});
+        } else{ //no key pressed for 2 seconds
+            socket.broadcast.emit("typing",false);
+        }
     });
     socket.on("disconnect",function(){
         Users-=1;

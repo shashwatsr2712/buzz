@@ -1,6 +1,7 @@
 $(function(){
     //Connection
     let socket=io.connect();
+    let timeout;
 
     //Variables declaration
     let username=$("#userName");
@@ -22,6 +23,30 @@ $(function(){
     username.keyup(function(event){
         if(event.keyCode===13){
             setUserName.click();
+        }
+    });
+
+    //Helper timeout function ('false' typing event)
+    function timeoutFunction(){
+        socket.emit('typing',false);
+    }
+    //Emitting an event when a user types
+    message.keyup(function(){
+        socket.emit('typing',true);
+        clearTimeout(timeout);
+        //If no key is pressed for 2 seconds, a 'false' typing event should be emitted to remove the "...is typing..." message
+        timeout=setTimeout(timeoutFunction,2000);
+    });
+
+    //Listening for message-typing event
+    socket.on('typing',function(data){
+        if(data){
+            detailAlert.empty();
+            detailAlert.append(data.username+" (ID:"+data.id+") is typing...");
+            detailAlert.slideDown();
+        } else{
+            detailAlert.empty();
+            detailAlert.slideUp();
         }
     });
 
