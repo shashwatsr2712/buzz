@@ -1,7 +1,7 @@
 $(function(){
     //Connection
     let socket=io.connect();
-    let timeout;
+    let timeout,timeout1,timeout2,timeout3,timeout4;
 
     //Variables declaration
     let username=$("#userName");
@@ -11,16 +11,20 @@ $(function(){
     let chatSpace=$("#chatSpace");
     let helloAlert=$("#helloUser");
     let detailAlert=$("#detailInfo");
+    let userList=$("#onlineList");
     let sessionID;
 
     //Display count of online users
     socket.on("displayCount",(data)=>{
         //Banner on top displaying online users
         $('#countUsers').empty();
+        // $('#floatingCountUsers').empty();
         if(data.count==1){
-            $('#countUsers').append('Waiting for other users to join...');
+            $('#countUsers').append('<i class="onlineIndicate fas fa-circle"></i>&nbsp;&nbsp;Waiting for other users to join...');
+            // $('#floatingCountUsers').append('<i class="onlineIndicate fas fa-circle"></i>&nbsp;Waiting for other users to join...');
         } else{
-            $('#countUsers').append('<strong>'+(data.count-1)+'</strong>&nbsp;&nbsp;online');
+            $('#countUsers').append('<i class="onlineIndicate fas fa-circle"></i>&nbsp;&nbsp;<strong>'+(data.count-1)+'</strong>&nbsp;&nbsp;online');
+            // $('#floatingCountUsers').append('<i class="onlineIndicate fas fa-circle"></i>&nbsp;<strong>'+(data.count-1)+'</strong>&nbsp;&nbsp;online');
         }
     })
 
@@ -78,8 +82,9 @@ $(function(){
     socket.on("changeUserName",(data) => {
         helloAlert.empty();
         helloAlert.append("Welcome "+data.username+"!");
-        helloAlert.slideDown(1000);
-        helloAlert.slideUp(1000);
+        helloAlert.slideDown(500);
+        clearTimeout(timeout1);
+        timeout1=setTimeout(()=>{helloAlert.slideUp(500);},3000);
     });
 
     //Listening for any new connection (after name change) and broadcasting the info to others
@@ -87,7 +92,8 @@ $(function(){
         detailAlert.empty();
         detailAlert.append(data.username+" (ID:"+data.id+") joined!");
         detailAlert.slideDown(500);
-        setTimeout(()=>{detailAlert.slideUp(500);},3000);
+        clearTimeout(timeout2);
+        timeout2=setTimeout(()=>{detailAlert.slideUp(500);},3000);
     });
 
     //Emit event for sending message
@@ -117,7 +123,79 @@ $(function(){
         detailAlert.empty();
         detailAlert.append(data.username+" (ID:"+data.id+") disconnected!");
         detailAlert.slideDown(500);
-        setTimeout(()=>{detailAlert.slideUp(500);},3000);
+        clearTimeout(timeout3);
+        timeout3=setTimeout(()=>{detailAlert.slideUp(500);},3000);
     });
 
+    //Emit an event when online-count banner is clicked
+    $('#countUsers').click(function(e){
+        if(userList.is(":visible")){
+            //Emit 'false' event to hide the list 
+            socket.emit("displayActive",false);
+        } else{
+            socket.emit("displayActive",true);
+        }
+    });
+    // $('#floatingCountUsers').click(function(e){
+    //     if(userList.is(":visible")){
+    //         //Emit 'false' event to hide the list 
+    //         socket.emit("displayActive",false);
+    //     } else{
+    //         socket.emit("displayActive",true);
+    //     }
+    // });
+
+    //Listening for displayActive event
+    socket.on('displayActive',(data)=>{
+        if(!data){
+            userList.slideUp(200);
+        } else{
+            userList.empty();
+            let temp='<ul id="listMembers" class="list-group">';
+            (data.usernames).forEach(function(name){
+                temp+='<li class="itemMember list-group-item list-group-item-warning">'+name+'</li>';
+            });
+            temp+='</ul>';
+            userList.append(temp);
+            userList.slideDown(200);
+        }
+    });
+
+    //Show floating countDiv on scrolling down 
+    // $(document).scroll(function(){
+    //     let scr=$(this).scrollTop();
+    //     if(scr>65){
+    //         $('#floatingCountUsers').slideDown(200);
+    //         clearTimeout(timeout4);
+    //         if(!userList.is(":visible")){
+    //             timeout4=setTimeout(()=>{$('#floatingCountUsers').slideUp(200);},3000);
+    //         }
+    //     } else{
+    //         $('#floatingCountUsers').slideUp(200);
+    //     }
+    // });
+
+    //Hide users' list on clicking anywhere other than within its boundaries
+    $(document).click(function(){
+        userList.slideUp(200);
+    });
+    userList.click(function(e) {
+        e.stopPropagation(); 
+        return false;
+    });
+
+
+    $(document).ready(function(){
+        blinkColor();
+    });
+    //Function to blink icon light for count banner
+    function blinkColor(){
+        //color:#CCE5FF<->rgb(204, 229, 255); color:#82CA35<->rgb(130, 202, 53);
+        if($("i.onlineIndicate").css('color')=='rgb(204, 229, 255)'){
+            $("i.onlineIndicate").css('color','#82CA35');
+        } else{
+            $("i.onlineIndicate").css('color','#CCE5FF');
+        }
+        setTimeout(function(){blinkColor();},500);
+    }
 });

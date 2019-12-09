@@ -11,6 +11,7 @@ html,body{
 /* Count Alert Margin setting */
 div#countUsers{
     margin-bottom: 0;
+    cursor:pointer;
 }
 
 /* Navbar */
@@ -27,6 +28,36 @@ nav a.nav-link{
 /* Navbar color */
 nav.bg-custom{
     background-color:#FFFFFF;
+}
+
+/* Floating banner */
+/* div#floatingCountUsers{
+    display:none;
+    border:1px dashed black; 
+    position:fixed;
+    top:15vh;
+    left:3vh;
+    z-index:4;
+    cursor:pointer;
+    background-color:#CCE5FF;
+    padding:3px;
+    padding-left:5px;
+    padding-right:5px;
+    border-radius:10px;
+} */
+
+/* Green Indicator */
+i.onlineIndicate{
+    color:#82CA35;
+}
+
+/* User List */
+div#onlineList{
+    display:none;
+    z-index:3;
+    position:sticky;
+    top:50px;
+    float:right;
 }
 
 /* Background image */
@@ -61,10 +92,6 @@ section#chatSpace{
 
 /* Styling chat boxes */
 div.message{
-    
-}
-
-div.chatInfo{
     
 }
 
