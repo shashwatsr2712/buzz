@@ -13,6 +13,17 @@ $(function(){
     let detailAlert=$("#detailInfo");
     let sessionID;
 
+    //Display count of online users
+    socket.on("displayCount",(data)=>{
+        //Banner on top displaying online users
+        $('#countUsers').empty();
+        if(data.count==1){
+            $('#countUsers').append('Waiting for other users to join...');
+        } else{
+            $('#countUsers').append('<strong>'+(data.count-1)+'</strong>&nbsp;&nbsp;online');
+        }
+    })
+
     //Put cursor in setName when 'Start Chat' is clicked
     $("#startBtn").click(function(e){
         e.preventDefault();
@@ -69,6 +80,14 @@ $(function(){
         helloAlert.append("Welcome "+data.username+"!");
         helloAlert.slideDown(1000);
         helloAlert.slideUp(1000);
+    });
+
+    //Listening for any new connection (after name change) and broadcasting the info to others
+    socket.on('newConnection',(data)=>{
+        detailAlert.empty();
+        detailAlert.append(data.username+" (ID:"+data.id+") joined!");
+        detailAlert.slideDown(500);
+        setTimeout(()=>{detailAlert.slideUp(500);},3000);
     });
 
     //Emit event for sending message

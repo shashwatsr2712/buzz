@@ -3,15 +3,12 @@ const bodyParser=require('body-parser');
 const app=express();
 //const User=require("./models/user")
 
-//Count of Users
-let Users=0;
-
 app.use(express.static(__dirname+"/public"));
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/",(req,res) => {
-    res.render("index",{Users:Users});
+    res.render("index");
 });
 
 
@@ -24,16 +21,18 @@ const server=app.listen(port,() => {
 let io=require("socket.io")(server);
 
 io.on("connection",(socket) => {
-    Users+=1;
     let sID=socket.id;
     console.log("New User connected!");
     socket.username='Anonymous';
     let sName=socket.username;
-    //Username in socket
+    //broadcast the number of online users
+    io.sockets.emit("displayCount",{count:io.engine.clientsCount});
     socket.on('changeUserName',(data) => {
         socket.username=data.username;
         sName=socket.username;
         socket.emit("changeUserName",{username:sName});
+        //broadcast to all but the one who has joined
+        socket.broadcast.emit('newConnection',{id:sID,username:sName});
     });
     socket.on("newMessage",(data) => {
         //broadcast to all (io.sockets <-> io)
@@ -47,8 +46,9 @@ io.on("connection",(socket) => {
         }
     });
     socket.on("disconnect",function(){
-        Users-=1;
         //broadcast to all but the one who has disconnected
         socket.broadcast.emit("disconnection",{id:sID,username:sName});
+        //broadcast the number of online users
+        io.sockets.emit("displayCount",{count:io.engine.clientsCount});
     });
 });
